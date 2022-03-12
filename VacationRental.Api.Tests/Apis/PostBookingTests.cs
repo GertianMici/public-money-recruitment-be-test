@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Tests.Brokers;
 using VacationRental.Api.ViewModels;
 using Xunit;
@@ -52,8 +53,8 @@ namespace VacationRental.Api.Tests.Apis
 
             Assert.True(getBookingResponse.IsSuccessStatusCode);
 
-            BookingViewModel getBookingResult =
-                await ApiBroker.DeserializeResponseContent<BookingViewModel>(getBookingResponse);
+            Booking getBookingResult =
+                await ApiBroker.DeserializeResponseContent<Booking>(getBookingResponse);
 
             Assert.Equal(postBookingRequest.RentalId, getBookingResult.RentalId);
             Assert.Equal(postBookingRequest.Nights, getBookingResult.Nights);

@@ -7,7 +7,8 @@ using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using VacationRental.Api.Brokers.Loggings;
 using VacationRental.Api.Brokers.Storages;
-using VacationRental.Api.ViewModels;
+using VacationRental.Api.Models.Bookings;
+using VacationRental.Api.Models.Rentals;
 
 namespace VacationRental.Api
 {
@@ -40,8 +41,8 @@ namespace VacationRental.Api
                 options.SwaggerDoc(name: "v1", info: openApiInfo);
             });
 
-            services.AddSingleton<IDictionary<int, RentalViewModel>>(new Dictionary<int, RentalViewModel>());
-            services.AddSingleton<IDictionary<int, BookingViewModel>>(new Dictionary<int, BookingViewModel>());
+            services.AddSingleton<IDictionary<int, Rental>>(new Dictionary<int, Rental>());
+            services.AddSingleton<IDictionary<int, Booking>>(new Dictionary<int, Booking>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
