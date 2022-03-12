@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using VacationRental.Api.ViewModels;
+using VacationRental.Api.Models.Calendars;
 
 namespace VacationRental.Api.Tests.Brokers
 {
@@ -9,7 +9,7 @@ namespace VacationRental.Api.Tests.Brokers
     {
         private const string CalendarRelativeUrl = "/api/v1/calendar";
 
-        public async ValueTask<HttpResponseMessage> PostCalendarAsync(CalendarViewModel model)
+        public async ValueTask<HttpResponseMessage> PostCalendarAsync(Calendar model)
         {
             StringContent contentString = StringifyJsonifyContent(model, "text/json");
 
@@ -43,7 +43,7 @@ namespace VacationRental.Api.Tests.Brokers
             return responseMessage;
         }
 
-        public async ValueTask<HttpResponseMessage> PutCalendarAsync(CalendarViewModel model)
+        public async ValueTask<HttpResponseMessage> PutCalendarAsync(Calendar model)
         {
             StringContent contentString = StringifyJsonifyContent(model, "text/json");
 

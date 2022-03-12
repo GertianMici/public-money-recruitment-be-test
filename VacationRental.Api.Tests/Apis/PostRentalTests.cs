@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.Tests.Brokers;
 using VacationRental.Api.ViewModels;
 using Xunit;
@@ -35,8 +36,8 @@ namespace VacationRental.Api.Tests.Apis
 
             Assert.True(getResponse.IsSuccessStatusCode);
 
-            RentalViewModel getResult =
-                await ApiBroker.DeserializeResponseContent<RentalViewModel>(getResponse);
+            Rental getResult =
+                await ApiBroker.DeserializeResponseContent<Rental>(getResponse);
 
             Assert.Equal(request.Units, getResult.Units);
 
