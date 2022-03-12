@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using VacationRental.Api.Models;
 using VacationRental.Api.Tests.Brokers;
+using VacationRental.Api.ViewModels;
 using Xunit;
 
 namespace VacationRental.Api.Tests.Apis
