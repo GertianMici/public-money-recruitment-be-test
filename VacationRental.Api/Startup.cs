@@ -5,7 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
-using VacationRental.Api.Models;
+using VacationRental.Api.Brokers.Loggings;
+using VacationRental.Api.Brokers.Storages;
+using VacationRental.Api.ViewModels;
 
 namespace VacationRental.Api
 {
@@ -23,6 +25,9 @@ namespace VacationRental.Api
         {
             services.AddLogging();
             services.AddControllers();
+            services.AddDbContext<StorageBroker>();
+
+            AddBrokers(services);
 
             services.AddSwaggerGen(options =>
             {
@@ -58,6 +63,12 @@ namespace VacationRental.Api
 
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
+        }
+
+        private static void AddBrokers(IServiceCollection services)
+        {
+            services.AddTransient<IStorageBroker, StorageBroker>();
+            services.AddTransient<ILoggingBroker, LoggingBroker>();
         }
     }
 }
