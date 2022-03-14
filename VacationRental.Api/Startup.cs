@@ -11,7 +11,7 @@ using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.Services.Foundations.Bookings;
 using VacationRental.Api.Services.Foundations.Rentals;
-using VacationRental.Api.Services.Orchestration;
+using VacationRental.Api.Services.Orchestrations;
 using VacationRental.Api.Services.Processings.Bookings;
 using VacationRental.Api.Services.Processings.Rentals;
 

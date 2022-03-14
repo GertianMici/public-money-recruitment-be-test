@@ -2,7 +2,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using VacationRental.Api.Models.Processings.Rentals;
+using VacationRental.Api.Models.Exceptions.Foundations.Rentals;
+using VacationRental.Api.Models.Exceptions.Processings.Rentals;
 using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.Models.Rentals.Exceptions;
 using VacationRental.Api.ViewModels;

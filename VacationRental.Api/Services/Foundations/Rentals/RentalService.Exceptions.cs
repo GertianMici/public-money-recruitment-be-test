@@ -3,6 +3,7 @@ using NetXceptions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using VacationRental.Api.Models.Exceptions.Foundations.Rentals;
 using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.Models.Rentals.Exceptions;
 

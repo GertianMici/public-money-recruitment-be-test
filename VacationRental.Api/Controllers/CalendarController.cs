@@ -3,9 +3,9 @@ using System;
 using System.Threading.Tasks;
 using VacationRental.Api.Models.Bookings.Exceptions;
 using VacationRental.Api.Models.Calendars;
-using VacationRental.Api.Models.Orchestration;
+using VacationRental.Api.Models.Exceptions.Orchestrations.BookingRentals;
 using VacationRental.Api.Models.Rentals.Exceptions;
-using VacationRental.Api.Services.Orchestration;
+using VacationRental.Api.Services.Orchestrations;
 
 namespace VacationRental.Api.Controllers
 {

@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Bookings.Exceptions;
-using VacationRental.Api.Models.Processings.Bookings;
+using VacationRental.Api.Models.Exceptions.Foundations.Bookings;
+using VacationRental.Api.Models.Exceptions.Processings.Bookings;
 using VacationRental.Api.ViewModels;
 
 namespace VacationRental.Api.Services.Processings.Bookings
