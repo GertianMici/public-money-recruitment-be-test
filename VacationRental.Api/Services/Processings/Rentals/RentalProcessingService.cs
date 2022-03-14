@@ -28,7 +28,8 @@ namespace VacationRental.Api.Services.Processings.Rentals
 
                 var rental = new Rental
                 {
-                    Units = rentalModel.Units
+                    Units = rentalModel.Units,
+                    PreparationTimeInDays = rentalModel.PreparationTimeInDays
                 };
 
                 Rental storageRental =

@@ -8,7 +8,10 @@ namespace VacationRental.Api.Services.Processings.Rentals
     {
         private static void ValidateRentalOnAdd(RentalBindingModel rentalModel)
         {
-            Validate((Rule: IsInvalid(rentalModel.Units), Parameter: nameof(rentalModel.Units)));
+            Validate(
+                (Rule: IsInvalid(rentalModel.Units), Parameter: nameof(rentalModel.Units)),
+                (Rule: IsNegative(rentalModel.PreparationTimeInDays), Parameter: nameof(rentalModel.PreparationTimeInDays))
+                );
         }
 
         public void ValidateRentalId(int rentalId) =>
@@ -41,6 +44,11 @@ namespace VacationRental.Api.Services.Processings.Rentals
         {
             Condition = units <= 0,
             Message = $"Units are required"
+        };
+        private static dynamic IsNegative(int preparationDays) => new
+        {
+            Condition = preparationDays < 0,
+            Message = $"Preparation days can not be negative"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
