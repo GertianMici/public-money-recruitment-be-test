@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Bookings.Exceptions;
 using VacationRental.Api.Models.Calendars;
+using VacationRental.Api.Models.Calendars.Exceptons;
 using VacationRental.Api.Models.Exceptions.Orchestrations.BookingRentals;
 using VacationRental.Api.Models.Exceptions.Processings.Bookings;
 using VacationRental.Api.Models.Exceptions.Processings.Rentals;
@@ -74,7 +75,7 @@ namespace VacationRental.Api.Services.Orchestrations
                 throw CreateAndLogProcessingServiceException(exception);
             }
         }
-        
+
         private async ValueTask<Calendar> TryCatch(
             ReturningCalendarFunction returningCalendarFunction)
         {
@@ -89,6 +90,10 @@ namespace VacationRental.Api.Services.Orchestrations
             catch (InvalidBookingException invalidBookingException)
             {
                 throw CreateAndLogProcessingValidationException(invalidBookingException);
+            }
+            catch (InvalidCalendarParameters invalidCalendarParameters)
+            {
+                throw CreateAndLogProcessingValidationException(invalidCalendarParameters);
             }
             catch (NotFoundBookingException notFoundBookingException)
             {
@@ -199,7 +204,7 @@ namespace VacationRental.Api.Services.Orchestrations
         private BookingRentalOrchestrationServiceException CreateAndLogProcessingServiceException(
             Exception exception)
         {
-            var bookingRentalOrchestrationServiceException = 
+            var bookingRentalOrchestrationServiceException =
                 new BookingRentalOrchestrationServiceException(exception);
 
             this.loggingBroker.LogError(bookingRentalOrchestrationServiceException);

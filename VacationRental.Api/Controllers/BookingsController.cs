@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Bookings.Exceptions;
 using VacationRental.Api.Models.Exceptions.Orchestrations.BookingRentals;
-using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.Models.Rentals.Exceptions;
 using VacationRental.Api.Services.Orchestrations;
 using VacationRental.Api.ViewModels;

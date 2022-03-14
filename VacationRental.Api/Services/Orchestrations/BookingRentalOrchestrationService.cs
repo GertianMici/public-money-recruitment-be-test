@@ -64,6 +64,7 @@ namespace VacationRental.Api.Services.Orchestrations
         public ValueTask<Calendar> GetCalendar(int rentalId, DateTime startDate, int nights) =>
             TryCatch(async () =>
             {
+                ValidateRentalId(rentalId);
                 ValidateNightsArePositive(nights);
 
                 Rental storageRental =
@@ -92,8 +93,8 @@ namespace VacationRental.Api.Services.Orchestrations
 
                     foreach (var booking in allBookingsForGivenRental)
                     {
-                        if (booking.RentalId == rentalId
-                            && booking.Start <= date.Date && booking.Start.AddDays(booking.Nights) > date.Date)
+                        if (booking.Start <= date.Date 
+                            && booking.Start.AddDays(booking.Nights) > date.Date)
                         {
                             date.Bookings.Add(
                                 new CalendarBookingViewModel

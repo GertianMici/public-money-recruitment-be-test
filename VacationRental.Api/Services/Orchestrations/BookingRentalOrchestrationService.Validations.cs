@@ -3,6 +3,7 @@ using System.Linq;
 using VacationRental.Api.Helpers.DateRange;
 using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Bookings.Exceptions;
+using VacationRental.Api.Models.Calendars.Exceptons;
 using VacationRental.Api.Models.Exceptions.Orchestrations.BookingRentals;
 using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.Models.Rentals.Exceptions;
@@ -39,7 +40,7 @@ namespace VacationRental.Api.Services.Orchestrations
             DateRange newBookingRange,
             Booking storageBooking)
         {
-            return 
+            return
                 newBookingRange.IncludesStartDate(storageBooking.Start)
                 || newBookingRange.IncludesEndDate(storageBooking.Start.AddDays(storageBooking.Nights))
                 || newBookingRange.IsIncludedInRange(
@@ -47,8 +48,13 @@ namespace VacationRental.Api.Services.Orchestrations
                     endDate: storageBooking.Start.AddDays(storageBooking.Nights));
         }
 
-        private static void ValidateNightsArePositive(int nights) =>
-            Validate((Rule: IsNightsInvalid(nights), Parameter: nameof(nights)));
+        private static void ValidateNightsArePositive(int nights)
+        {
+            if (nights <= 0)
+            {
+                throw new InvalidCalendarParameters(message: $"Nights must be positive");
+            }
+        }
 
         private static void ValidateUnitsAvailability(int unitsBooked, Rental storageRental)
         {
@@ -90,18 +96,19 @@ namespace VacationRental.Api.Services.Orchestrations
             }
         }
 
+        private static void ValidateRentalId(int rentalId)
+        {
+            if (rentalId <= 0)
+            {
+                throw new InvalidRentalException();
+            }
+        }
+
         private static dynamic IsInvalid(int intValue) => new
         {
             Condition = intValue <= 0,
             Message = $"Value is required"
         };
-
-        private static dynamic IsNightsInvalid(int nights) => new
-        {
-            Condition = nights <= 0,
-            Message = $"Nights must be positive"
-        };
-
 
         private static dynamic IsInvalid(DateTime date) => new
         {
