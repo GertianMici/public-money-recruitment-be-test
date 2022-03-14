@@ -37,6 +37,10 @@ namespace VacationRental.Api.Services.Orchestrations
             {
                 throw CreateAndLogProcessingValidationException(notFoundBookingException);
             }
+            catch (RentalNotAvailableException rentalNotAvailableException)
+            {
+                throw CreateAndLogProcessingValidationException(rentalNotAvailableException);
+            }
             catch (NullRentalException nullRentalException)
             {
                 throw CreateAndLogProcessingValidationException(nullRentalException);
@@ -146,6 +150,10 @@ namespace VacationRental.Api.Services.Orchestrations
             catch (NullRentalException nullRentalException)
             {
                 throw CreateAndLogProcessingValidationException(nullRentalException);
+            }
+            catch (RentalNotAvailableException rentalNotAvailableException)
+            {
+                throw CreateAndLogProcessingValidationException(rentalNotAvailableException);
             }
             catch (InvalidRentalException invalidRentalException)
             {

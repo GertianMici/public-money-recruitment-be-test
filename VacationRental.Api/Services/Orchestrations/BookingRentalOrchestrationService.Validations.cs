@@ -55,7 +55,7 @@ namespace VacationRental.Api.Services.Orchestrations
 
         private static void ValidateUnitsAvailability(int unitsBooked, Rental storageRental)
         {
-            if (unitsBooked > storageRental.Units)
+            if (unitsBooked >= storageRental.Units)
             {
                 throw new RentalNotAvailableException(storageRental.Id);
             }
