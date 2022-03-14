@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VacationRental.Api.Brokers.Loggings;
+using VacationRental.Api.Helpers.DateRange;
 using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Calendars;
 using VacationRental.Api.Models.Rentals;
@@ -38,14 +39,20 @@ namespace VacationRental.Api.Services.Orchestrations
 
                 ValidateRentalIsNull(storageRental);
 
-                IQueryable<Booking> allBookings =
-                    this.bookingProcessingService.RetrieveAllBookings();
+                IQueryable<Booking> allBookingsForGivenRental =
+                    this.bookingProcessingService.RetrieveAllBookings()
+                        .Where(booking => booking.RentalId == bookingModel.RentalId);
+
 
                 int unitsBooked = 0;
 
-                foreach (Booking booking in allBookings)
+                var newBookingRange = new DateRange(
+                    bookingModel.Start, 
+                    bookingModel.Start.AddDays(bookingModel.Nights));
+
+                foreach (Booking booking in allBookingsForGivenRental)
                 {
-                    if (ValidateBookingAvailability(bookingModel, booking))
+                    if (ValidateBookingAvailability(newBookingRange, booking))
                         unitsBooked++;
                 }
 
@@ -70,8 +77,9 @@ namespace VacationRental.Api.Services.Orchestrations
                     Dates = new List<CalendarDateBooking>()
                 };
 
-                IQueryable<Booking> allBookings =
-                    this.bookingProcessingService.RetrieveAllBookings();
+                IQueryable<Booking> allBookingsForGivenRental =
+                   this.bookingProcessingService.RetrieveAllBookings()
+                       .Where(booking => booking.RentalId == rentalId);
 
 
                 for (var i = 0; i < nights; i++)
@@ -82,7 +90,7 @@ namespace VacationRental.Api.Services.Orchestrations
                         Bookings = new List<CalendarBookingViewModel>()
                     };
 
-                    foreach (var booking in allBookings)
+                    foreach (var booking in allBookingsForGivenRental)
                     {
                         if (booking.RentalId == rentalId
                             && booking.Start <= date.Date && booking.Start.AddDays(booking.Nights) > date.Date)

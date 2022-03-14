@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using VacationRental.Api.Helpers.DateRange;
 using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Bookings.Exceptions;
 using VacationRental.Api.Models.Exceptions.Orchestrations.BookingRentals;
@@ -35,19 +36,15 @@ namespace VacationRental.Api.Services.Orchestrations
            Validate((Rule: IsInvalid(bookingId), Parameter: nameof(Booking.Id)));
 
         private static bool ValidateBookingAvailability(
-            BookingBindingModel bookingModel,
+            DateRange newBookingRange,
             Booking storageBooking)
         {
-            return storageBooking.RentalId == bookingModel.RentalId
-                            && (storageBooking.Start <= bookingModel.Start.Date
-                                && storageBooking.Start.AddDays(storageBooking.Nights)
-                                    > bookingModel.Start.Date)
-                            || (storageBooking.Start < bookingModel.Start.AddDays(bookingModel.Nights)
-                                && storageBooking.Start.AddDays(storageBooking.Nights)
-                                    >= bookingModel.Start.AddDays(bookingModel.Nights))
-                            || (storageBooking.Start > bookingModel.Start
-                                && storageBooking.Start.AddDays(storageBooking.Nights)
-                                    < bookingModel.Start.AddDays(bookingModel.Nights));
+            return 
+                newBookingRange.IncludesStartDate(storageBooking.Start)
+                || newBookingRange.IncludesEndDate(storageBooking.Start.AddDays(storageBooking.Nights))
+                || newBookingRange.IsIncludedInRange(
+                    startDate: storageBooking.Start,
+                    endDate: storageBooking.Start.AddDays(storageBooking.Nights));
         }
 
         private static void ValidateNightsArePositive(int nights) =>
