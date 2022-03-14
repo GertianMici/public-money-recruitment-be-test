@@ -7,7 +7,7 @@ namespace VacationRental.Api.Services.Processings.Bookings
 {
     public interface IBookingProcessingService
     {
-        ValueTask<ResourceIdViewModel> AddBookingAsync(BookingBindingModel bookingModel);
+        ValueTask<ResourceIdViewModel> AddBookingAsync(BookingBindingModel bookingModel, int? unit);
         ValueTask<Booking> RetrieveBookingByIdAsync(int bookingId);
         IQueryable<Booking> RetrieveAllBookings();
     }

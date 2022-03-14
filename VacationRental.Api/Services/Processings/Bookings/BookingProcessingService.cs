@@ -19,7 +19,7 @@ namespace VacationRental.Api.Services.Processings.Bookings
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<ResourceIdViewModel> AddBookingAsync(BookingBindingModel bookingModel) =>
+        public ValueTask<ResourceIdViewModel> AddBookingAsync(BookingBindingModel bookingModel, int? unit) =>
             TryCatch(async () =>
             {
                 ValidateBookingOnAdd(bookingModel);
@@ -28,7 +28,8 @@ namespace VacationRental.Api.Services.Processings.Bookings
                 {
                     RentalId = bookingModel.RentalId,
                     Nights = bookingModel.Nights,
-                    Start = bookingModel.Start
+                    Start = bookingModel.Start,
+                    Unit = unit ?? 0
                 };
 
                 Booking storageBooking =

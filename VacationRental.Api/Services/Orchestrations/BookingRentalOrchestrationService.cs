@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VacationRental.Api.Brokers.Loggings;
 using VacationRental.Api.Helpers.DateRange;
+using VacationRental.Api.Models;
 using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Calendars;
 using VacationRental.Api.Models.Rentals;
@@ -44,21 +45,28 @@ namespace VacationRental.Api.Services.Orchestrations
                         .Where(booking => booking.RentalId == bookingModel.RentalId);
 
 
-                int unitsBooked = 0;
+                var unitsBookedList = new List<int>();
 
                 var newBookingRange = new DateRange(
-                    bookingModel.Start, 
-                    bookingModel.Start.AddDays(bookingModel.Nights));
+                    bookingModel.Start,
+                    bookingModel.Start.AddDays(bookingModel.Nights + storageRental.PreparationTimeInDays));
 
                 foreach (Booking booking in allBookingsForGivenRental)
                 {
-                    if (ValidateBookingAvailability(newBookingRange, booking))
-                        unitsBooked++;
+                    if (HasExistingBookingInDateRange(newBookingRange, booking, storageRental.PreparationTimeInDays))
+                    {
+                        unitsBookedList.Add(booking.Unit);
+                    }
                 }
 
-                ValidateUnitsAvailability(unitsBooked, storageRental);
+                int? newBookingUnit = 0;
 
-                return await this.bookingProcessingService.AddBookingAsync(bookingModel);
+                if (ValidateUnitsAvailability(unitsBookedList.Count, storageRental))
+                {
+                    newBookingUnit = Enumerable.Range(1, storageRental.Units).Except(unitsBookedList)?.First();
+                };
+
+                return await this.bookingProcessingService.AddBookingAsync(bookingModel, newBookingUnit);
             });
 
         public ValueTask<Calendar> GetCalendar(int rentalId, DateTime startDate, int nights) =>
@@ -82,25 +90,36 @@ namespace VacationRental.Api.Services.Orchestrations
                    this.bookingProcessingService.RetrieveAllBookings()
                        .Where(booking => booking.RentalId == rentalId);
 
-
                 for (var i = 0; i < nights; i++)
                 {
                     var date = new CalendarDateBooking
                     {
                         Date = startDate.Date.AddDays(i),
-                        Bookings = new List<CalendarBookingViewModel>()
+                        Bookings = new List<CalendarBookingViewModel>(),
+                        PreparationTimes = new List<PreparationTime>()
                     };
 
                     foreach (var booking in allBookingsForGivenRental)
                     {
-                        if (booking.Start <= date.Date 
+                        if (booking.Start <= date.Date
                             && booking.Start.AddDays(booking.Nights) > date.Date)
                         {
                             date.Bookings.Add(
                                 new CalendarBookingViewModel
                                 {
-                                    Id = booking.Id
+                                    Id = booking.Id,
+                                    Unit = booking.Unit
                                 });
+
+                        }
+                        if (date.Date >= booking.Start.AddDays(booking.Nights) &&
+                            date.Date < booking.Start.AddDays(booking.Nights + storageRental.PreparationTimeInDays))
+                        {
+                            date.PreparationTimes.Add(
+                                 new PreparationTime
+                                 {
+                                     Unit = booking.Unit
+                                 });
                         }
                     }
 

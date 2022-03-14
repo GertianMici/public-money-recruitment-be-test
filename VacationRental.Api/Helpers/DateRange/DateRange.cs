@@ -28,9 +28,9 @@ namespace VacationRental.Api.Helpers.DateRange
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool IncludesStartDate(DateTime value)
+        public bool IncludesStartDate(DateTime startDate)
         {
-            return Start <= value && value < End;
+            return Start <= startDate && startDate < End;
         }
 
         /// <summary>
@@ -38,9 +38,9 @@ namespace VacationRental.Api.Helpers.DateRange
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool IncludesEndDate(DateTime value)
+        public bool IncludesEndDate(DateTime endDate)
         {
-            return Start < value && value <= End;
+            return Start < endDate && endDate <= End;
         }
 
         /// <summary>
