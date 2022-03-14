@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using VacationRental.Api.Models.Bookings;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
+using VacationRental.Api.Models.Bookings.Exceptions;
 using VacationRental.Api.Models.Calendars;
-using VacationRental.Api.Models.Rentals;
+using VacationRental.Api.Models.Orchestration;
+using VacationRental.Api.Models.Rentals.Exceptions;
+using VacationRental.Api.Services.Orchestration;
 
 namespace VacationRental.Api.Controllers
 {
@@ -11,51 +13,45 @@ namespace VacationRental.Api.Controllers
     [ApiController]
     public class CalendarController : ControllerBase
     {
-        private readonly IDictionary<int, Rental> _rentals;
-        private readonly IDictionary<int, Booking> _bookings;
+        private readonly IBookingRentalOrchestrationService bookingRentalOrchestrationService;
 
         public CalendarController(
-            IDictionary<int, Rental> rentals,
-            IDictionary<int, Booking> bookings)
+            IBookingRentalOrchestrationService bookingRentalOrchestrationService)
         {
-            _rentals = rentals;
-            _bookings = bookings;
+            this.bookingRentalOrchestrationService = bookingRentalOrchestrationService;
         }
 
         [HttpGet]
-        public Calendar Get(int rentalId, DateTime start, int nights)
+        public async ValueTask<ActionResult<Calendar>> Get(int rentalId, DateTime start, int nights)
         {
-            if (nights < 0)
-                throw new ApplicationException("Nights must be positive");
-            if (!_rentals.ContainsKey(rentalId))
-                throw new ApplicationException("Rental not found");
-
-            var result = new Calendar
+            try
             {
-                RentalId = rentalId,
-                Dates = new List<CalendarDateBooking>()
-            };
-            for (var i = 0; i < nights; i++)
-            {
-                var date = new CalendarDateBooking
-                {
-                    Date = start.Date.AddDays(i),
-                    Bookings = new List<int>()
-                };
+                Calendar calendar =
+                    await this.bookingRentalOrchestrationService.GetCalendar(
+                        rentalId,
+                        startDate: start,
+                        nights);
 
-                foreach (var booking in _bookings.Values)
-                {
-                    if (booking.RentalId == rentalId
-                        && booking.Start <= date.Date && booking.Start.AddDays(booking.Nights) > date.Date)
-                    {
-                        date.Bookings.Add(booking.Id);
-                    }
-                }
-
-                result.Dates.Add(date);
+                return Ok(calendar);
             }
-
-            return result;
+            catch (BookingRentalOrchestrationValidationException exception)
+                when (exception.InnerException is NotFoundRentalException
+                    || exception.InnerException is NotFoundBookingException)
+            {
+                return NotFound(exception.InnerException?.Message);
+            }
+            catch (BookingRentalOrchestrationValidationException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
+            catch (BookingRentalOrchestrationDependencyValidationException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
+            catch (BookingRentalOrchestrationServiceException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
         }
     }
 }
