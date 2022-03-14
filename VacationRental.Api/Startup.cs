@@ -9,6 +9,11 @@ using VacationRental.Api.Brokers.Loggings;
 using VacationRental.Api.Brokers.Storages;
 using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Rentals;
+using VacationRental.Api.Services.Foundations.Bookings;
+using VacationRental.Api.Services.Foundations.Rentals;
+using VacationRental.Api.Services.Orchestration;
+using VacationRental.Api.Services.Processings.Bookings;
+using VacationRental.Api.Services.Processings.Rentals;
 
 namespace VacationRental.Api
 {
@@ -29,6 +34,9 @@ namespace VacationRental.Api
             services.AddDbContext<StorageBroker>();
 
             AddBrokers(services);
+            AddFoundationServices(services);
+            AddProcessingServices(services);
+            AddOrchestrationServices(services);
 
             services.AddSwaggerGen(options =>
             {
@@ -40,9 +48,6 @@ namespace VacationRental.Api
 
                 options.SwaggerDoc(name: "v1", info: openApiInfo);
             });
-
-            services.AddSingleton<IDictionary<int, Rental>>(new Dictionary<int, Rental>());
-            services.AddSingleton<IDictionary<int, Booking>>(new Dictionary<int, Booking>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +75,22 @@ namespace VacationRental.Api
         {
             services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
+        }
+
+        private static void AddFoundationServices(IServiceCollection services)
+        {
+            services.AddTransient<IBookingService, BookingService>();
+            services.AddTransient<IRentalService, RentalService>();
+        }
+
+        private static void AddProcessingServices(IServiceCollection services)
+        {
+            services.AddTransient<IRentalProcessingService, RentalProcessingService>();
+            services.AddTransient<IBookingProcessingService, BookingProcessingService>();
+        }
+        private static void AddOrchestrationServices(IServiceCollection services)
+        {
+            services.AddTransient<IBookingRentalOrchestrationService, BookingRentalOrchestrationService>();
         }
     }
 }

@@ -80,7 +80,7 @@ namespace VacationRental.Api.Tests.Apis
             var postBooking1Request = new BookingBindingModel
             {
                 RentalId = postRentalResult.Id,
-                Nights = 3,
+                Nights = 2,
                 Start = new DateTime(2002, 01, 01)
             };
 
@@ -93,7 +93,7 @@ namespace VacationRental.Api.Tests.Apis
             var postBooking2Request = new BookingBindingModel
             {
                 RentalId = postRentalResult.Id,
-                Nights = 1,
+                Nights = 3,
                 Start = new DateTime(2002, 01, 02)
             };
 

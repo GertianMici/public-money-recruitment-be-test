@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using VacationRental.Api.Models.Processings.Rentals;
 using VacationRental.Api.Models.Rentals;
+using VacationRental.Api.Models.Rentals.Exceptions;
+using VacationRental.Api.Services.Processings.Rentals;
 using VacationRental.Api.ViewModels;
 
 namespace VacationRental.Api.Controllers
@@ -10,35 +12,72 @@ namespace VacationRental.Api.Controllers
     [ApiController]
     public class RentalsController : ControllerBase
     {
-        private readonly IDictionary<int, Rental> _rentals;
+        private readonly IRentalProcessingService rentalProcessingService;
 
-        public RentalsController(IDictionary<int, Rental> rentals)
-        {
-            _rentals = rentals;
-        }
+        public RentalsController(IRentalProcessingService rentalProcessingService) =>
+            this.rentalProcessingService = rentalProcessingService;
+
 
         [HttpGet]
         [Route("{rentalId:int}")]
-        public Rental Get(int rentalId)
+        public async ValueTask<ActionResult<Rental>> Get(int rentalId)
         {
-            if (!_rentals.ContainsKey(rentalId))
-                throw new ApplicationException("Rental not found");
+            try
+            {
+                Rental rental = await this.rentalProcessingService.RetrieveRentalByIdAsync(rentalId);
 
-            return _rentals[rentalId];
+                return Ok(rental);
+            }
+            catch (RentalProcessingValidationException rentalValidationException)
+                when (rentalValidationException.InnerException is NotFoundRentalException)
+            {
+                return NotFound(rentalValidationException.InnerException?.Message);
+            }
+            catch (RentalProcessingValidationException rentalValidationException)
+            {
+                return BadRequest(rentalValidationException.InnerException?.Message);
+            }
+            catch (RentalProcessingDependencyException rentalDependencyException)
+            {
+                return BadRequest(rentalDependencyException.InnerException?.Message);
+            }
+            catch (RentalProcessingDependencyValidationException
+                rentalDependencyValidationException)
+            {
+                return BadRequest(rentalDependencyValidationException.InnerException?.Message);
+            }
+            catch (RentalProcessingServiceException rentalServiceException)
+            {
+                return BadRequest(rentalServiceException.InnerException?.Message);
+            }
         }
 
         [HttpPost]
-        public ResourceIdViewModel Post(RentalBindingModel model)
+        public async ValueTask<ActionResult<ResourceIdViewModel>> Post(RentalBindingModel rentalModel)
         {
-            var key = new ResourceIdViewModel { Id = _rentals.Keys.Count + 1 };
-
-            _rentals.Add(key.Id, new Rental
+            try
             {
-                Id = key.Id,
-                Units = model.Units
-            });
+                ResourceIdViewModel rentalId =
+                    await this.rentalProcessingService.AddRentalAsync(rentalModel);
 
-            return key;
+                return Ok(rentalId);
+            }
+            catch (RentalProcessingValidationException rentalValidationException)
+            {
+                return BadRequest(rentalValidationException.InnerException?.Message);
+            }
+            catch (RentalProcessingDependencyValidationException rentalDependencyValidationException)
+            {
+                return Conflict(rentalDependencyValidationException.InnerException?.Message);
+            }
+            catch (RentalProcessingDependencyException rentalDependencyException)
+            {
+                return BadRequest(rentalDependencyException.InnerException?.Message);
+            }
+            catch (RentalProcessingServiceException rentalServiceException)
+            {
+                return BadRequest(rentalServiceException.InnerException?.Message);
+            }
         }
     }
 }
