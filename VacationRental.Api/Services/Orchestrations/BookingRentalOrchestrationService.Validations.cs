@@ -36,16 +36,19 @@ namespace VacationRental.Api.Services.Orchestrations
         private void ValidateBookingId(int bookingId) =>
            Validate((Rule: IsInvalid(bookingId), Parameter: nameof(Booking.Id)));
 
-        private static bool ValidateBookingAvailability(
+        private static bool HasExistingBookingInDateRange(
             DateRange newBookingRange,
-            Booking storageBooking)
+            Booking storageBooking,
+            int preparationTimeInDays)
         {
-            return
-                newBookingRange.IncludesStartDate(storageBooking.Start)
-                || newBookingRange.IncludesEndDate(storageBooking.Start.AddDays(storageBooking.Nights))
+            return                
+                newBookingRange.IncludesStartDate(
+                    startDate: storageBooking.Start)
+                || newBookingRange.IncludesEndDate(
+                    endDate: storageBooking.Start.AddDays(storageBooking.Nights + preparationTimeInDays))
                 || newBookingRange.IsIncludedInRange(
                     startDate: storageBooking.Start,
-                    endDate: storageBooking.Start.AddDays(storageBooking.Nights));
+                    endDate: storageBooking.Start.AddDays(storageBooking.Nights + preparationTimeInDays));
         }
 
         private static void ValidateNightsArePositive(int nights)
@@ -56,12 +59,14 @@ namespace VacationRental.Api.Services.Orchestrations
             }
         }
 
-        private static void ValidateUnitsAvailability(int unitsBooked, Rental storageRental)
+        private static bool ValidateUnitsAvailability(int unitsBooked, Rental storageRental)
         {
             if (unitsBooked >= storageRental.Units)
             {
                 throw new RentalNotAvailableException(storageRental.Id);
             }
+
+            return true;
         }
 
         private static void ValidateRentals(IQueryable<Rental> rentals)

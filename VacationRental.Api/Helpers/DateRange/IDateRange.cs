@@ -8,8 +8,8 @@ namespace VacationRental.Api.Helpers.DateRange
         DateTime End { get; }
         bool Includes(DateTime value);
         bool Includes(IDateRange range);
-        bool IncludesEndDate(DateTime value);
-        bool IncludesStartDate(DateTime value);
+        bool IncludesEndDate(DateTime endDate);
+        bool IncludesStartDate(DateTime startDate);
         bool IsIncludedInRange(DateTime startDate, DateTime endDate);
     }
 }
