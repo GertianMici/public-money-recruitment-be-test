@@ -90,7 +90,10 @@ namespace VacationRental.Api.Services.Orchestrations.Rentals
             {
                 if (HasExistingBookingInDateRange(modifiedBookingRange, booking, preparationTimeInDays))
                 {
-                    unitsBooked++;
+                    if (storageBooking.Unit != booking.Unit)
+                    {
+                        unitsBooked++;
+                    }
 
                     if (storageBooking.Unit == booking.Unit &&
                         storageBooking.Id != booking.Id)
