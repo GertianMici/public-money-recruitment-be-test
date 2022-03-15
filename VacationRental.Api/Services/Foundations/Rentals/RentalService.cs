@@ -51,6 +51,9 @@ namespace VacationRental.Api.Services.Foundations.Rentals
 
             ValidateStorageRental(maybeRental, rental.Id);
 
+            maybeRental.PreparationTimeInDays = rental.PreparationTimeInDays;
+            maybeRental.Units = rental.Units;
+
             return await this.storageBroker.UpdateRentalAsync(rental);
         });
 

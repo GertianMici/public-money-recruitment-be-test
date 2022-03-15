@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using VacationRental.Api.ViewModels;
 
@@ -19,14 +18,6 @@ namespace VacationRental.Api.Tests.Brokers
             return responseMessage;
         }
 
-        public async ValueTask<HttpResponseMessage> GetAllRentalsAsync()
-        {
-            HttpResponseMessage responseMessage =
-                await this.httpClient.GetAsync(RentalsRelativeUrl);
-
-            return responseMessage;
-        }
-
         public async ValueTask<HttpResponseMessage> GetRentalByIdAsync(int rentalId)
         {
             HttpResponseMessage responseMessage =
@@ -35,22 +26,15 @@ namespace VacationRental.Api.Tests.Brokers
             return responseMessage;
         }
 
-        public async ValueTask<HttpResponseMessage> PutRentalAsync(RentalBindingModel model)
+        public async ValueTask<HttpResponseMessage> PutRentalAsync(int rentalId, RentalBindingModel model)
         {
             StringContent contentString = StringifyJsonifyContent(model, "text/json");
 
             HttpResponseMessage responseMessage =
-               await this.httpClient.PutAsync(RentalsRelativeUrl, contentString);
+               await this.httpClient.PutAsync($"{RentalsRelativeUrl}/{rentalId}", contentString);
 
             return responseMessage;
         }
 
-        public async ValueTask<HttpResponseMessage> DeleteRentalByIdAsync(int rentalId)
-        {
-            HttpResponseMessage responseMessage =
-               await this.httpClient.DeleteAsync($"{RentalsRelativeUrl}/{rentalId}");
-
-            return responseMessage;
-        }
     }
 }

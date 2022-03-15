@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using VacationRental.Api.ViewModels;
 
@@ -19,14 +18,6 @@ namespace VacationRental.Api.Tests.Brokers
             return responseMessage;
         }
 
-        public async ValueTask<HttpResponseMessage> GetAllBookingsAsync()
-        {
-            HttpResponseMessage responseMessage =
-                await this.httpClient.GetAsync(BookingsRelativeUrl);
-
-            return responseMessage;
-        }
-
         public async ValueTask<HttpResponseMessage> GetBookingByIdAsync(int bookingId)
         {
             HttpResponseMessage responseMessage =
@@ -35,22 +26,5 @@ namespace VacationRental.Api.Tests.Brokers
             return responseMessage;
         }
 
-        public async ValueTask<HttpResponseMessage> PutBookingAsync(BookingBindingModel model)
-        {
-            StringContent contentString = StringifyJsonifyContent(model, "text/json");
-
-            HttpResponseMessage responseMessage =
-               await this.httpClient.PutAsync(BookingsRelativeUrl, contentString);
-
-            return responseMessage;
-        }
-
-        public async ValueTask<HttpResponseMessage> DeleteBookingByIdAsync(int bookingId)
-        {
-            HttpResponseMessage responseMessage =
-               await this.httpClient.DeleteAsync($"{BookingsRelativeUrl}/{bookingId}");
-
-            return responseMessage;
-        }
     }
 }

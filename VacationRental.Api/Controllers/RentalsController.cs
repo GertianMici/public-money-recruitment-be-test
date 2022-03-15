@@ -80,7 +80,7 @@ namespace VacationRental.Api.Controllers
 
         [HttpPut]
         [Route("{rentalId:int}")]
-        public async ValueTask<ActionResult<ResourceIdViewModel>> Put(int rentalId, RentalBindingModel rentalModel)
+        public async ValueTask<ActionResult<Rental>> Put(int rentalId, RentalBindingModel rentalModel)
         {
             try
             {
