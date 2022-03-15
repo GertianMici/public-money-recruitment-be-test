@@ -5,7 +5,7 @@ using VacationRental.Api.Models.Bookings.Exceptions;
 using VacationRental.Api.Models.Calendars;
 using VacationRental.Api.Models.Exceptions.Orchestrations.BookingRentals;
 using VacationRental.Api.Models.Rentals.Exceptions;
-using VacationRental.Api.Services.Orchestrations;
+using VacationRental.Api.Services.Orchestrations.Bookings;
 
 namespace VacationRental.Api.Controllers
 {

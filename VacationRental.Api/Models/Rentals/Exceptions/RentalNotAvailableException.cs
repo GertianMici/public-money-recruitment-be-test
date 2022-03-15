@@ -1,6 +1,6 @@
 ﻿using NetXceptions;
 
-namespace VacationRental.Api.Models.Exceptions.Orchestrations.BookingRentals
+namespace VacationRental.Api.Models.Rentals.Exceptions
 {
     public class RentalNotAvailableException : NetXception
     {

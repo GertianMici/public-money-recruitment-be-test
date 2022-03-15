@@ -8,11 +8,12 @@ using VacationRental.Api.Models;
 using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Calendars;
 using VacationRental.Api.Models.Rentals;
+using VacationRental.Api.Services.Orchestrations.Bookings;
 using VacationRental.Api.Services.Processings.Bookings;
 using VacationRental.Api.Services.Processings.Rentals;
 using VacationRental.Api.ViewModels;
 
-namespace VacationRental.Api.Services.Orchestrations
+namespace VacationRental.Api.Services.Orchestrations.Bookings
 {
     public partial class BookingRentalOrchestrationService : IBookingRentalOrchestrationService
     {

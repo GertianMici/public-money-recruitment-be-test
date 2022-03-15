@@ -4,7 +4,7 @@ using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Calendars;
 using VacationRental.Api.ViewModels;
 
-namespace VacationRental.Api.Services.Orchestrations
+namespace VacationRental.Api.Services.Orchestrations.Bookings
 {
     public interface IBookingRentalOrchestrationService
     {
