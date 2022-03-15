@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Tynamix.ObjectFiller;
 using VacationRental.Api.Models.Bookings;
-using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.Tests.Brokers;
 using VacationRental.Api.ViewModels;
 using Xunit;
@@ -44,7 +43,8 @@ namespace VacationRental.Api.Tests.Apis.Bookings
         {
             int rentalId = await PostRandomRental();
 
-            return new BookingBindingModel { 
+            return new BookingBindingModel
+            {
                 Nights = GetRandomNumber(),
                 RentalId = rentalId,
                 Start = GetRandomDateTime()
@@ -63,7 +63,7 @@ namespace VacationRental.Api.Tests.Apis.Bookings
 
             return resourceIdViewModel.Id;
         }
-        
+
         private static DateTime GetRandomDateTime() =>
            new DateTimeRange(earliestDate: new DateTime()).GetValue();
 

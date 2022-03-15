@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VacationRental.Api.Models.Exceptions.Orchestrations.Rentals;
-using VacationRental.Api.Models.Exceptions.Processings.Rentals;
 using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.Models.Rentals.Exceptions;
 using VacationRental.Api.Services.Orchestrations.Rentals;
@@ -25,7 +24,7 @@ namespace VacationRental.Api.Controllers
         {
             try
             {
-                Rental rental = 
+                Rental rental =
                     await this.rentalOrchestrationService.RetrieveRentalByIdAsync(rentalId);
 
                 return Ok(rental);

@@ -54,7 +54,7 @@ namespace VacationRental.Api.Tests.Apis.Rentals
                 DeserializeResponseContent<ResourceIdViewModel>(postHttpResponseMessage);
 
             expectedRental.Id = resourceIdViewModel.Id;
-            
+
             return expectedRental;
         }
 

@@ -1,8 +1,4 @@
 ﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.ViewModels;
@@ -38,7 +34,7 @@ namespace VacationRental.Api.Tests.Apis.Rentals
                 DeserializeResponseContent<Rental>(getHttpResponseMessage);
 
             expectedRental.Id = resourceIdViewModel.Id;
-            
+
             //then
             actualRental.Should().BeEquivalentTo(expectedRental);
         }
