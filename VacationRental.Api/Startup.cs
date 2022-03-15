@@ -4,14 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System.Collections.Generic;
 using VacationRental.Api.Brokers.Loggings;
 using VacationRental.Api.Brokers.Storages;
-using VacationRental.Api.Models.Bookings;
-using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.Services.Foundations.Bookings;
 using VacationRental.Api.Services.Foundations.Rentals;
-using VacationRental.Api.Services.Orchestrations;
+using VacationRental.Api.Services.Orchestrations.Bookings;
+using VacationRental.Api.Services.Orchestrations.Rentals;
 using VacationRental.Api.Services.Processings.Bookings;
 using VacationRental.Api.Services.Processings.Rentals;
 
@@ -91,6 +89,7 @@ namespace VacationRental.Api
         private static void AddOrchestrationServices(IServiceCollection services)
         {
             services.AddTransient<IBookingRentalOrchestrationService, BookingRentalOrchestrationService>();
+            services.AddTransient<IRentalOrchestrationService, RentalOrchestrationService>();
         }
     }
 }

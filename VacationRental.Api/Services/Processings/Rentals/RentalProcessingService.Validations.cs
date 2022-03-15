@@ -13,6 +13,14 @@ namespace VacationRental.Api.Services.Processings.Rentals
                 (Rule: IsNegative(rentalModel.PreparationTimeInDays), Parameter: nameof(rentalModel.PreparationTimeInDays))
                 );
         }
+        
+        private static void ValidateRentalOnModify(RentalBindingModel rentalModel)
+        {
+            Validate(
+                (Rule: IsInvalid(rentalModel.Units), Parameter: nameof(rentalModel.Units)),
+                (Rule: IsNegative(rentalModel.PreparationTimeInDays), Parameter: nameof(rentalModel.PreparationTimeInDays))
+                );
+        }
 
         public void ValidateRentalId(int rentalId) =>
            Validate((Rule: IsInvalid(rentalId), Parameter: nameof(Rental.Id)));
@@ -24,6 +32,7 @@ namespace VacationRental.Api.Services.Processings.Rentals
                 throw new NullRentalException();
             }
         }
+
         private static void ValidateRentalResourceIdModelIsNotNull(ResourceIdViewModel rentalResourceIdNodel)
         {
             if (rentalResourceIdNodel is null)
@@ -40,11 +49,12 @@ namespace VacationRental.Api.Services.Processings.Rentals
             }
         }
 
-        private static dynamic IsInvalid(int units) => new
+        private static dynamic IsInvalid(int value) => new
         {
-            Condition = units <= 0,
-            Message = $"Units are required"
+            Condition = value <= 0,
+            Message = $"Value is required"
         };
+
         private static dynamic IsNegative(int preparationDays) => new
         {
             Condition = preparationDays < 0,

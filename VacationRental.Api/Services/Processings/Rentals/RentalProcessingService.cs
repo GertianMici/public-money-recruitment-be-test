@@ -56,5 +56,25 @@ namespace VacationRental.Api.Services.Processings.Rentals
 
                 return maybeRental;
             });
+
+        public ValueTask<Rental> ModifyRentalAsync(int rentalId, RentalBindingModel rentalModel) =>
+            TryCatch(async () =>
+            {
+                ValidateRentalId(rentalId);
+                ValidateRentalOnModify(rentalModel);
+
+                Rental storageRental =
+                    await this.rentalService.RetrieveRentalByIdAsync(rentalId);
+
+                ValidateStorageRental(storageRental, rentalId);
+
+                storageRental.Units = rentalModel.Units;
+                storageRental.PreparationTimeInDays = rentalModel.PreparationTimeInDays;
+
+                Rental modifiedRental =
+                    await this.rentalService.ModifyRentalAsync(storageRental);
+
+                return modifiedRental;
+            });
     }
 }

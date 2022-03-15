@@ -4,7 +4,7 @@ using VacationRental.Api.Models.Bookings;
 using VacationRental.Api.Models.Bookings.Exceptions;
 using VacationRental.Api.Models.Exceptions.Orchestrations.BookingRentals;
 using VacationRental.Api.Models.Rentals.Exceptions;
-using VacationRental.Api.Services.Orchestrations;
+using VacationRental.Api.Services.Orchestrations.Bookings;
 using VacationRental.Api.ViewModels;
 
 namespace VacationRental.Api.Controllers
@@ -27,7 +27,8 @@ namespace VacationRental.Api.Controllers
         {
             try
             {
-                Booking booking = await this.bookingRentalOrchestrationService.RetrieveBookingByIdAsync(bookingId);
+                Booking booking =
+                    await this.bookingRentalOrchestrationService.RetrieveBookingByIdAsync(bookingId);
 
                 return Ok(booking);
             }

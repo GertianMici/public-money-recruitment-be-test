@@ -11,7 +11,7 @@ using VacationRental.Api.Models.Exceptions.Processings.Rentals;
 using VacationRental.Api.Models.Rentals.Exceptions;
 using VacationRental.Api.ViewModels;
 
-namespace VacationRental.Api.Services.Orchestrations
+namespace VacationRental.Api.Services.Orchestrations.Bookings
 {
     public partial class BookingRentalOrchestrationService
     {
@@ -28,31 +28,31 @@ namespace VacationRental.Api.Services.Orchestrations
             }
             catch (NullBookingException nullBookingException)
             {
-                throw CreateAndLogProcessingValidationException(nullBookingException);
+                throw CreateAndLogOrchestrationValidationException(nullBookingException);
             }
             catch (InvalidBookingException invalidBookingException)
             {
-                throw CreateAndLogProcessingValidationException(invalidBookingException);
+                throw CreateAndLogOrchestrationValidationException(invalidBookingException);
             }
             catch (NotFoundBookingException notFoundBookingException)
             {
-                throw CreateAndLogProcessingValidationException(notFoundBookingException);
+                throw CreateAndLogOrchestrationValidationException(notFoundBookingException);
             }
             catch (RentalNotAvailableException rentalNotAvailableException)
             {
-                throw CreateAndLogProcessingValidationException(rentalNotAvailableException);
+                throw CreateAndLogOrchestrationValidationException(rentalNotAvailableException);
             }
             catch (NullRentalException nullRentalException)
             {
-                throw CreateAndLogProcessingValidationException(nullRentalException);
+                throw CreateAndLogOrchestrationValidationException(nullRentalException);
             }
             catch (InvalidRentalException invalidRentalException)
             {
-                throw CreateAndLogProcessingValidationException(invalidRentalException);
+                throw CreateAndLogOrchestrationValidationException(invalidRentalException);
             }
             catch (NotFoundRentalException notFoundRentalException)
             {
-                throw CreateAndLogProcessingValidationException(notFoundRentalException);
+                throw CreateAndLogOrchestrationValidationException(notFoundRentalException);
             }
             catch (BookingProcessingValidationException exception)
             {
@@ -72,7 +72,7 @@ namespace VacationRental.Api.Services.Orchestrations
             }
             catch (Exception exception)
             {
-                throw CreateAndLogProcessingServiceException(exception);
+                throw CreateAndLogOrchestrationServiceException(exception);
             }
         }
 
@@ -85,31 +85,31 @@ namespace VacationRental.Api.Services.Orchestrations
             }
             catch (NullBookingException nullBookingException)
             {
-                throw CreateAndLogProcessingValidationException(nullBookingException);
+                throw CreateAndLogOrchestrationValidationException(nullBookingException);
             }
             catch (InvalidBookingException invalidBookingException)
             {
-                throw CreateAndLogProcessingValidationException(invalidBookingException);
+                throw CreateAndLogOrchestrationValidationException(invalidBookingException);
             }
             catch (InvalidCalendarParameters invalidCalendarParameters)
             {
-                throw CreateAndLogProcessingValidationException(invalidCalendarParameters);
+                throw CreateAndLogOrchestrationValidationException(invalidCalendarParameters);
             }
             catch (NotFoundBookingException notFoundBookingException)
             {
-                throw CreateAndLogProcessingValidationException(notFoundBookingException);
+                throw CreateAndLogOrchestrationValidationException(notFoundBookingException);
             }
             catch (NullRentalException nullRentalException)
             {
-                throw CreateAndLogProcessingValidationException(nullRentalException);
+                throw CreateAndLogOrchestrationValidationException(nullRentalException);
             }
             catch (InvalidRentalException invalidRentalException)
             {
-                throw CreateAndLogProcessingValidationException(invalidRentalException);
+                throw CreateAndLogOrchestrationValidationException(invalidRentalException);
             }
             catch (NotFoundRentalException notFoundRentalException)
             {
-                throw CreateAndLogProcessingValidationException(notFoundRentalException);
+                throw CreateAndLogOrchestrationValidationException(notFoundRentalException);
             }
             catch (BookingProcessingValidationException exception)
             {
@@ -129,7 +129,7 @@ namespace VacationRental.Api.Services.Orchestrations
             }
             catch (Exception exception)
             {
-                throw CreateAndLogProcessingServiceException(exception);
+                throw CreateAndLogOrchestrationServiceException(exception);
             }
         }
 
@@ -142,31 +142,31 @@ namespace VacationRental.Api.Services.Orchestrations
             }
             catch (NullBookingException nullBookingException)
             {
-                throw CreateAndLogProcessingValidationException(nullBookingException);
+                throw CreateAndLogOrchestrationValidationException(nullBookingException);
             }
             catch (InvalidBookingException invalidBookingException)
             {
-                throw CreateAndLogProcessingValidationException(invalidBookingException);
+                throw CreateAndLogOrchestrationValidationException(invalidBookingException);
             }
             catch (NotFoundBookingException notFoundBookingException)
             {
-                throw CreateAndLogProcessingValidationException(notFoundBookingException);
+                throw CreateAndLogOrchestrationValidationException(notFoundBookingException);
             }
             catch (NullRentalException nullRentalException)
             {
-                throw CreateAndLogProcessingValidationException(nullRentalException);
+                throw CreateAndLogOrchestrationValidationException(nullRentalException);
             }
             catch (RentalNotAvailableException rentalNotAvailableException)
             {
-                throw CreateAndLogProcessingValidationException(rentalNotAvailableException);
+                throw CreateAndLogOrchestrationValidationException(rentalNotAvailableException);
             }
             catch (InvalidRentalException invalidRentalException)
             {
-                throw CreateAndLogProcessingValidationException(invalidRentalException);
+                throw CreateAndLogOrchestrationValidationException(invalidRentalException);
             }
             catch (NotFoundRentalException notFoundRentalException)
             {
-                throw CreateAndLogProcessingValidationException(notFoundRentalException);
+                throw CreateAndLogOrchestrationValidationException(notFoundRentalException);
             }
             catch (BookingProcessingValidationException exception)
             {
@@ -186,7 +186,7 @@ namespace VacationRental.Api.Services.Orchestrations
             }
             catch (Exception exception)
             {
-                throw CreateAndLogProcessingServiceException(exception);
+                throw CreateAndLogOrchestrationServiceException(exception);
             }
         }
 
@@ -201,7 +201,7 @@ namespace VacationRental.Api.Services.Orchestrations
             throw bookingRentalOrchestrationDependencyValidationException;
         }
 
-        private BookingRentalOrchestrationServiceException CreateAndLogProcessingServiceException(
+        private BookingRentalOrchestrationServiceException CreateAndLogOrchestrationServiceException(
             Exception exception)
         {
             var bookingRentalOrchestrationServiceException =
@@ -212,7 +212,7 @@ namespace VacationRental.Api.Services.Orchestrations
             return bookingRentalOrchestrationServiceException;
         }
 
-        private BookingRentalOrchestrationValidationException CreateAndLogProcessingValidationException(
+        private BookingRentalOrchestrationValidationException CreateAndLogOrchestrationValidationException(
             NetXception exception)
         {
             var bookingRentalProcessingValidationException =

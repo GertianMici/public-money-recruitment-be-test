@@ -9,7 +9,7 @@ using VacationRental.Api.Models.Rentals;
 using VacationRental.Api.Models.Rentals.Exceptions;
 using VacationRental.Api.ViewModels;
 
-namespace VacationRental.Api.Services.Orchestrations
+namespace VacationRental.Api.Services.Orchestrations.Bookings
 {
     public partial class BookingRentalOrchestrationService
     {
