@@ -1,7 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using VacationRental.Api.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using VacationRental.Api.Models.Exceptions.Orchestrations.Rentals;
+using VacationRental.Api.Models.Rentals;
+using VacationRental.Api.Models.Rentals.Exceptions;
+using VacationRental.Api.Services.Orchestrations.Rentals;
+using VacationRental.Api.ViewModels;
 
 namespace VacationRental.Api.Controllers
 {
@@ -9,35 +12,99 @@ namespace VacationRental.Api.Controllers
     [ApiController]
     public class RentalsController : ControllerBase
     {
-        private readonly IDictionary<int, RentalViewModel> _rentals;
+        private readonly IRentalOrchestrationService rentalOrchestrationService;
 
-        public RentalsController(IDictionary<int, RentalViewModel> rentals)
-        {
-            _rentals = rentals;
-        }
+        public RentalsController(IRentalOrchestrationService rentalOrchestrationService) =>
+            this.rentalOrchestrationService = rentalOrchestrationService;
+
 
         [HttpGet]
         [Route("{rentalId:int}")]
-        public RentalViewModel Get(int rentalId)
+        public async ValueTask<ActionResult<Rental>> Get(int rentalId)
         {
-            if (!_rentals.ContainsKey(rentalId))
-                throw new ApplicationException("Rental not found");
+            try
+            {
+                Rental rental =
+                    await this.rentalOrchestrationService.RetrieveRentalByIdAsync(rentalId);
 
-            return _rentals[rentalId];
+                return Ok(rental);
+            }
+            catch (RentalOrchestrationValidationException exception)
+                when (exception.InnerException is NotFoundRentalException)
+            {
+                return NotFound(exception.InnerException?.Message);
+            }
+            catch (RentalOrchestrationValidationException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
+            catch (RentalOrchestrationDependencyValidationException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
+            catch (RentalOrchestrationServiceException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
         }
 
         [HttpPost]
-        public ResourceIdViewModel Post(RentalBindingModel model)
+        public async ValueTask<ActionResult<ResourceIdViewModel>> Post(RentalBindingModel rentalModel)
         {
-            var key = new ResourceIdViewModel { Id = _rentals.Keys.Count + 1 };
-
-            _rentals.Add(key.Id, new RentalViewModel
+            try
             {
-                Id = key.Id,
-                Units = model.Units
-            });
+                ResourceIdViewModel rentalId =
+                    await this.rentalOrchestrationService.AddRentalAsync(rentalModel);
 
-            return key;
+                return Ok(rentalId);
+            }
+            catch (RentalOrchestrationValidationException exception)
+                when (exception.InnerException is NotFoundRentalException)
+            {
+                return NotFound(exception.InnerException?.Message);
+            }
+            catch (RentalOrchestrationValidationException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
+            catch (RentalOrchestrationDependencyValidationException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
+            catch (RentalOrchestrationServiceException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("{rentalId:int}")]
+        public async ValueTask<ActionResult<Rental>> Put(int rentalId, RentalBindingModel rentalModel)
+        {
+            try
+            {
+                Rental rental =
+                    await this.rentalOrchestrationService.ModifyRentalAsync(rentalId, rentalModel);
+
+                return Ok(rental);
+            }
+            catch (RentalOrchestrationValidationException exception)
+                when (exception.InnerException is NotFoundRentalException)
+            {
+                return NotFound(exception.InnerException?.Message);
+            }
+            catch (RentalOrchestrationValidationException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
+            catch (RentalOrchestrationDependencyValidationException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
+            catch (RentalOrchestrationServiceException exception)
+            {
+                return BadRequest(exception.InnerException?.Message);
+            }
         }
     }
 }

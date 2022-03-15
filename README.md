@@ -1,3 +1,31 @@
+## Explanations regarding modifications
+
+### Project Structure
+
+- `VacationRental.Api` is an Web Api project that contains models, view model (request models),
+and bussines logic. Architecture is modeled as a monolithic app, but with principles as Microsevices Architecture where there are no dependencies from entities.
+
+#### Project Folders
+
+1. `Brokers` are wrappers around any external libraries, resources, services or APIs to statisfy
+ a local interface for the bussines to interact with there resources without having to be tightly coupled with any particular resource or library implementation. Brokers are meant to be disposable and replaceable.
+
+2. `Services` contains three different type of services
+   - `Foundation services` which are the first point of contact between bussines logic and
+   the brokers. Foundation services are a hybrid of bussines logic and an abstaction layer for the processing operations where the high order bussines logic happens. These services main 
+   responsibility is to ensure that incoming and outgoung data is validated and vetted structurally, logically and externally. It is a layer of validation on top of the primitive operation offered by brokers.
+   - `Processing services` are the layer where the high order of bussines logic is implemented.
+   They may combine two primitive functions for their corresponding foundation service to introduce new functionality, or change the outcome with added bussines logic.
+   - `Orchestration services`, complex or higher order logic are the combinator between multiple 
+   processings services to perform a complex logical operation. Their main responsibility is to do a multi-entity logical operation and delegate the dependencies of these operations to processing services
+3. `Controllers` or the exposers are disposable components that have the single responsibility of exposing core bussines logic by mapping response to a protocol, to allow someone or something to interact with our bussines logic.
+
+- `VacationRental.Api.Tests` contains acceptance test made for exposed endpoints. The same project architecture is followed.
+
+This project architecture is based on a public repository called `The Standard` by a group of engineers. [The-Standard](https://github.com/hassanhabib/The-Standard)
+
+
+### Project Requirement:
 ## How we'd like to recieve the soluion?
 
 1. Clone this repository and upload it as a new public repository in your github account
